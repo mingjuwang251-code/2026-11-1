@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>知識大偵探：學習單與批判思考評分系統</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter & Noto Sans TC -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', 'Inter', sans-serif;
+        }
+        @media print {
+            .no-print { display: none !important; }
+            .print-shadow-none { box-shadow: none !important; border: 1px solid #ccc !important; }
+            body { background: white !important; color: black !important; }
+        }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen text-slate-800 flex flex-col">
+
+    <!-- Header Navigation -->
+    <header class="bg-indigo-900 text-white shadow-lg sticky top-0 z-50 no-print">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-amber-400 text-indigo-950 p-2 rounded-xl shadow">
+                    <i class="fa-solid fa-user-secret text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-wide">知識大偵探 🕵️‍♂️</h1>
+                    <p class="text-xs text-indigo-200">批判教育學（Michael Apple）課堂實踐與評估系統</p>
+                </div>
+            </div>
+            
+            <!-- Tab Buttons -->
+            <div class="flex space-x-2 mt-2 sm:mt-0">
+                <button id="tab-worksheet-btn" onclick="switchTab('worksheet')" class="px-3 sm:px-4 py-2 rounded-lg font-bold text-xs sm:text-sm transition-all bg-amber-400 text-indigo-950 shadow">
+                    <i class="fa-solid fa-file-pen mr-1"></i> 學生學習單
+                </button>
+                <button id="tab-script-btn" onclick="switchTab('script')" class="px-3 sm:px-4 py-2 rounded-lg font-bold text-xs sm:text-sm transition-all bg-indigo-800 hover:bg-indigo-700 text-white">
+                    <i class="fa-solid fa-clapperboard mr-1"></i> 活動體驗腳本
+                </button>
+                <button id="tab-rubric-btn" onclick="switchTab('rubric')" class="px-3 sm:px-4 py-2 rounded-lg font-bold text-xs sm:text-sm transition-all bg-indigo-800 hover:bg-indigo-700 text-white">
+                    <i class="fa-solid fa-square-poll-vertical mr-1"></i> 評分規準 (Rubric)
+                </button>
+                <button onclick="window.print()" class="px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold transition shadow">
+                    <i class="fa-solid fa-print"></i> 列印
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-5xl mx-auto w-full p-4 sm:p-6 flex-grow">
+
+        <!-- ==================== TAB 1: 學生學習單 ==================== -->
+        <div id="tab-worksheet" class="block space-y-6">
+
+            <!-- Banner Card -->
+            <div class="bg-gradient-to-r from-amber-500 to-amber-600 rounded-2xl p-6 text-white shadow-md relative overflow-hidden">
+                <div class="relative z-10">
+                    <span class="bg-black/20 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">CRITICAL PEDAGOGY WORKSHEET</span>
+                    <h2 class="text-2xl sm:text-3xl font-black mt-2">🔍 尋找「看不見的眼鏡」大任務</h2>
+                    <p class="mt-2 text-amber-100 text-sm sm:text-base max-w-2xl">
+                        你看見的、寫在課本上的，都是「絕對的真理」嗎？其實每個人都戴著不同顏色的眼鏡！讓我們一起抓出隱藏在知識背後的密碼吧！
+                    </p>
+                </div>
+                <i class="fa-solid fa-glasses absolute -right-4 -bottom-6 text-9xl opacity-10"></i>
+            </div>
+
+            <!-- Student Info Bar -->
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 grid grid-cols-2 sm:grid-cols-4 gap-4 no-print">
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 mb-1">班級</label>
+                    <input type="text" id="student-class" placeholder="例如：六年三班" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 mb-1">座號</label>
+                    <input type="text" id="student-number" placeholder="例如：12號" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 mb-1">姓名</label>
+                    <input type="text" id="student-name" placeholder="請輸入姓名" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 mb-1">日期</label>
+                    <input type="date" id="student-date" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                </div>
+            </div>
+
+            <!-- Print Header only -->
+            <div class="hidden print:block border-b-2 border-slate-800 pb-2 mb-4">
+                <div class="flex justify-between items-center">
+                    <h1 class="text-xl font-bold">🔍 知識大偵探：尋找「看不見的眼鏡」學習單</h1>
+                    <div class="text-sm">班級：______ 座號：______ 姓名：___________</div>
+                </div>
+            </div>
+
+            <!-- Station 1 -->
+            <section class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                <div class="flex items-center space-x-3 mb-4">
+                    <span class="bg-indigo-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">1</span>
+                    <h3 class="text-lg font-bold text-slate-800">🎬 第一站：【小熊果汁風波】—— 視角大不同</h3>
+                </div>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">1. 我們小組代表的角色是：</label>
+                        <div class="flex flex-wrap gap-4 text-sm">
+                            <label class="flex items-center space-x-2 cursor-pointer bg-slate-50 hover:bg-slate-100 p-2.5 rounded-lg border border-slate-200">
+                                <input type="radio" name="role" value="小明" class="text-indigo-600 focus:ring-indigo-500">
+                                <span>小明（不小心倒果汁的人）</span>
+                            </label>
+                            <label class="flex items-center space-x-2 cursor-pointer bg-slate-50 hover:bg-slate-100 p-2.5 rounded-lg border border-slate-200">
+                                <input type="radio" name="role" value="小華" class="text-indigo-600 focus:ring-indigo-500">
+                                <span>小華（被弄髒衣服的人）</span>
+                            </label>
+                            <label class="flex items-center space-x-2 cursor-pointer bg-slate-50 hover:bg-slate-100 p-2.5 rounded-lg border border-slate-200">
+                                <input type="radio" name="role" value="小美" class="text-indigo-600 focus:ring-indigo-500">
+                                <span>小美（新書包受害者）</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">2. 站在這個角色的立場，我們覺得這件事情最重要的是什麼？</label>
+                        <textarea rows="2" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="例如：我不是故意的，對方不可以動手推人！"></textarea>
+                    </div>
+
+                    <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
+                        <h4 class="font-bold text-amber-900 text-sm mb-2"><i class="fa-solid fa-lightbulb text-amber-600 mr-1"></i> 【對比思考】聽完其他組的報告後：</h4>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-amber-800 mb-1">▪ 哪一個細節是「我們組寫了，但別組完全沒提到」的？</label>
+                                <input type="text" class="w-full bg-white border border-amber-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-amber-800 mb-1">▪ 為什麼大家看到的「事實」會不一樣？</label>
+                                <input type="text" class="w-full bg-white border border-amber-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="因為每個人只會注意到對自己重要的部分...">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Station 2 -->
+            <section class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                <div class="flex items-center space-x-3 mb-4">
+                    <span class="bg-indigo-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">2</span>
+                    <h3 class="text-lg font-bold text-slate-800">✂️ 第二站：【歷史課本總編輯】—— 選擇與權力</h3>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">1. 你們小組最後「選上了」哪些內容？為什麼選它們？</label>
+                        <textarea rows="2" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="我們選了金牌得主照片，因為要展現學校很厲害..."></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">2. 哪些內容被你們「丟進垃圾桶」沒有選？</label>
+                        <textarea rows="2" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="我們丟掉了裁判爭議和志工媽媽很累的照片..."></textarea>
+                    </div>
+
+                    <div class="bg-indigo-50 rounded-xl p-4 border border-indigo-200">
+                        <label class="block font-bold text-indigo-900 text-sm mb-1"><i class="fa-solid fa-brain text-indigo-600 mr-1"></i> 【深度思考】如果十年後的學弟妹「只看到」你們編的這份特刊，他們會錯過什麼重要的真相？</label>
+                        <textarea rows="2" class="w-full bg-white border border-indigo-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="他們會以為那次運動會非常完美，不知道背後有很多人受委屈或辛苦付出..."></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Station 3 -->
+            <section class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                <div class="flex items-center space-x-3 mb-4">
+                    <span class="bg-indigo-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">3</span>
+                    <h3 class="text-lg font-bold text-slate-800">🔎 第三站：【隱藏的插圖】—— 抓出課本的「微偏見」</h3>
+                </div>
+
+                <div class="space-y-4">
+                    <p class="text-sm text-slate-600">打開你的社會或國語課本，仔細觀察裡面的圖片，完成這份「偵探報告」：</p>
+                    
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                            <h4 class="font-bold text-slate-800 text-sm mb-2"><i class="fa-solid fa-image text-indigo-500 mr-1"></i> 插圖主角的外貌與身分</h4>
+                            <p class="text-xs text-slate-500 mb-2">課本裡的「醫生、科學家、老闆」大多數長怎樣？「做家事、照顧小孩」的人是誰？</p>
+                            <textarea rows="2" class="w-full bg-white border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="寫下你的發現..."></textarea>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                            <h4 class="font-bold text-slate-800 text-sm mb-2"><i class="fa-solid fa-comments text-indigo-500 mr-1"></i> 誰的聲音被忽略了？</h4>
+                            <p class="text-xs text-slate-500 mb-2">這幾頁課本在講這件事時，誰的感覺或想法「完全沒有被提到」？</p>
+                            <textarea rows="2" class="w-full bg-white border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="例如：只有講老闆賺錢，沒講工人辛不辛苦..."></textarea>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">【思考】如果天天看這些圖片，會讓我們誤以為世界「本來就應該」長怎樣？</label>
+                        <input type="text" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="會讓我們以為家事都是媽媽做、或者白領工作才是厲害的...">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Final Reflection -->
+            <section class="bg-gradient-to-br from-indigo-900 to-slate-900 text-white rounded-2xl p-6 shadow-lg">
+                <div class="flex items-center space-x-3 mb-4">
+                    <span class="bg-amber-400 text-indigo-950 w-8 h-8 rounded-full flex items-center justify-center font-black text-sm">🔑</span>
+                    <h3 class="text-lg font-bold text-white">🏆 終極任務：獲得你的「批判思考金鑰」</h3>
+                </div>
+
+                <p class="text-sm text-indigo-200 mb-4">恭喜你完成體驗！請記住解密知識的「三大金鑰提問」：</p>
+
+                <div class="grid sm:grid-cols-3 gap-3 mb-6">
+                    <div class="bg-white/10 backdrop-blur p-3 rounded-xl border border-white/20">
+                        <div class="font-bold text-amber-300 text-sm">🔑 金鑰 1</div>
+                        <div class="text-base font-black">誰說的？</div>
+                        <div class="text-xs text-slate-300 mt-1">作者是誰？他站在什麼立場？</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur p-3 rounded-xl border border-white/20">
+                        <div class="font-bold text-amber-300 text-sm">🔑 金鑰 2</div>
+                        <div class="text-base font-black">誰沒說？</div>
+                        <div class="text-xs text-slate-300 mt-1">誰的聲音或心情被漏掉了？</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur p-3 rounded-xl border border-white/20">
+                        <div class="font-bold text-amber-300 text-sm">🔑 金鑰 3</div>
+                        <div class="text-base font-black">對誰有利？</div>
+                        <div class="text-xs text-slate-300 mt-1">相信這種說法，誰會得到好處？</div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-indigo-100 mb-2">【反思寫作】請選擇一個你最近看過的新聞、廣告、影片或課文，試著用上面「其中一把金鑰」進行質疑與分析：</label>
+                    <textarea rows="3" class="w-full bg-white/10 border border-white/20 text-white placeholder-slate-400 rounded-xl p-3 text-sm focus:ring-2 focus:ring-amber-400 outline-none" placeholder="例如：我看到某個飲料廣告寫『喝了就會考100分』。用金鑰3分析，這對飲料公司很有利，因為能賺錢，但根本沒有科學證據..."></textarea>
+                </div>
+            </section>
+        </div>
+
+
+        <!-- ==================== TAB 2: 活動體驗腳本 (NEW) ==================== -->
+        <div id="tab-script" class="hidden space-y-6">
+
+            <!-- Title Header -->
+            <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-md border-l-4 border-amber-400">
+                <span class="bg-amber-400 text-indigo-950 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">TEACHING SCRIPT & LESSON PLAN</span>
+                <h2 class="text-2xl font-black mt-2">🎬 三套體驗活動課堂腳本與導引話術</h2>
+                <p class="text-sm text-slate-300 mt-1">專為教師備課設計，包含活動步驟、角色台詞小短劇、小組分工 instructions 與批判性對話引導語。</p>
+            </div>
+
+            <!-- Activity 1 Script -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex items-center space-x-3 border-b border-slate-100 pb-3">
+                    <span class="bg-indigo-600 text-white px-3 py-1 rounded-lg text-sm font-bold">活動一</span>
+                    <h3 class="text-xl font-bold text-slate-800">小熊果汁風波（視角與立場體驗）</h3>
+                    <span class="bg-slate-100 text-slate-600 text-xs px-2.5 py-1 rounded-md">時間：約 15 分鐘</span>
+                </div>
+
+                <div class="bg-indigo-50/60 p-4 rounded-xl border border-indigo-100 text-sm">
+                    <h4 class="font-bold text-indigo-950 mb-1"><i class="fa-solid fa-bullseye text-indigo-600 mr-1"></i> 教學目標</h4>
+                    <p class="text-slate-700">讓學生體會「同一個事件」發生時，不同利益角色紀錄與報告出來的「事實」完全不同，進而覺察立場帶來的視角限制。</p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-800 text-sm mb-2"><i class="fa-solid fa-masks-theater text-amber-600 mr-1"></i> 短劇表演台詞（請安排三位學生或教師親自演出 2 分鐘）</h4>
+                    <div class="bg-slate-900 text-slate-200 p-4 rounded-xl space-y-2 text-xs sm:text-sm font-mono">
+                        <p><span class="text-amber-400 font-bold">[情境說明]</span> 教室角落，小明邊看書邊走路，不小心撞到小華的課桌...</p>
+                        <p><span class="text-sky-300 font-bold">小明：</span>（驚呼）啊！對不起對不起，我剛才沒看路撞到你的桌子！</p>
+                        <p><span class="text-emerald-300 font-bold">小華：</span>（大怒站起來推小明）你眼睛長在哪裡啊！我的芭樂果汁全倒了，衣服都黏黏的！</p>
+                        <p><span class="text-pink-300 font-bold">小美：</span>（尖叫）天啊！你們吵架就吵架，果汁噴到我昨天剛買的新小白書包上了啦！小華你幹嘛用力推他啊！</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-800 text-sm mb-2"><i class="fa-solid fa-users-gear text-indigo-600 mr-1"></i> 分組任務與寫作腳本</h4>
+                    <ul class="list-disc list-inside text-sm text-slate-700 space-y-1.5 pl-2">
+                        <li><strong>全班分為三大組：</strong>第一組代表「小明」、第二組代表「小華」、第三組代表「小美」。</li>
+                        <li><strong>任務要求：</strong>請在學習單第一站寫出一份《事件真相報告》，向導師說明發生了什麼事。</li>
+                    </ul>
+                </div>
+
+                <div class="bg-amber-50 p-4 rounded-xl border border-amber-200">
+                    <h4 class="font-bold text-amber-900 text-sm mb-1"><i class="fa-solid fa-comments text-amber-600 mr-1"></i> 教師提問引導話術（解構時間）</h4>
+                    <div class="text-xs sm:text-sm text-amber-950 italic space-y-1">
+                        <p>🗣️ 「大家聽完三組的報告，小明的報告強調『我是不小心，對方推人』；小華強調『他弄髒我衣服，推他是正當防衛』；小美的報告全是『我的新書包完蛋了』。」</p>
+                        <p>🗣️ 「問大家：這三份報告寫的是不是『真實發生的事』？那為什麼湊在一起看，感覺像三個不一樣的故事？這說明了什麼？**（引導出：每個人都會挑對自己重要的事講）**」</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity 2 Script -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex items-center space-x-3 border-b border-slate-100 pb-3">
+                    <span class="bg-indigo-600 text-white px-3 py-1 rounded-lg text-sm font-bold">活動二</span>
+                    <h3 class="text-xl font-bold text-slate-800">歷史課本總編輯（選擇與權力體驗）</h3>
+                    <span class="bg-slate-100 text-slate-600 text-xs px-2.5 py-1 rounded-md">時間：約 20 分鐘</span>
+                </div>
+
+                <div class="bg-indigo-50/60 p-4 rounded-xl border border-indigo-100 text-sm">
+                    <h4 class="font-bold text-indigo-950 mb-1"><i class="fa-solid fa-bullseye text-indigo-600 mr-1"></i> 教學目標</h4>
+                    <p class="text-slate-700">讓學生體驗「決定哪些資訊可以放進課本、哪些要刪除」的選擇過程，理解「刪除資訊」是一種隱形權力，會直接影響後人對歷史的認識。</p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-800 text-sm mb-2"><i class="fa-solid fa-folder-open text-amber-600 mr-1"></i> 準備素材卡（教師發給每組 5 張卡片）</h4>
+                    <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs text-center">
+                        <div class="bg-slate-100 p-2 rounded-lg border border-slate-300 font-bold text-slate-700">卡片A: 冠軍頒獎高呼燦爛瞬間</div>
+                        <div class="bg-slate-100 p-2 rounded-lg border border-slate-300 font-bold text-slate-700">卡片B: 選手落敗在雨中痛哭</div>
+                        <div class="bg-slate-100 p-2 rounded-lg border border-slate-300 font-bold text-slate-700">卡片C: 志工媽媽滿頭大汗搬便當</div>
+                        <div class="bg-slate-100 p-2 rounded-lg border border-slate-300 font-bold text-slate-700">卡片D: 裁判誤判爭議現場紀錄</div>
+                        <div class="bg-slate-100 p-2 rounded-lg border border-slate-300 font-bold text-slate-700">卡片E: 校長與來賓剪綵大合照</div>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-800 text-sm mb-2"><i class="fa-solid fa-sliders text-indigo-600 mr-1"></i> 編輯任務指令</h4>
+                    <p class="text-sm text-slate-700">「請各組擔任《校園運動會十週年官方紀念冊》總編輯。因為版面有限，**只能選擇 2 張卡片貼上專題**，其他 3 張必須丟進垃圾桶。」</p>
+                </div>
+
+                <div class="bg-amber-50 p-4 rounded-xl border border-amber-200">
+                    <h4 class="font-bold text-amber-900 text-sm mb-1"><i class="fa-solid fa-comments text-amber-600 mr-1"></i> 教師提問引導話術（權力揭示）</h4>
+                    <div class="text-xs sm:text-sm text-amber-950 italic space-y-1">
+                        <p>🗣️ 「大家看看，幾乎所有組別都選了『冠軍獎牌』和『校長合照』，把『裁判爭議』和『志工媽媽辛苦』丟掉了。」</p>
+                        <p>🗣️ 「假設十年後的新生看到這本特刊，他們會以為那一天的運動會長怎樣？（引導回答：完美、無瑕）。那被丟掉的那些志工媽媽的努力和裁判問題，是不是就像『從來沒發生過一樣』？」</p>
+                        <p>🗣️ **【結語點題】**：「我們的教科書也是一群總編輯編出來的。**被丟掉的訊息，不代表不存在。批判思考的第一步，就是問：『誰的歷史被刪掉了？』**」</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity 3 Script -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex items-center space-x-3 border-b border-slate-100 pb-3">
+                    <span class="bg-indigo-600 text-white px-3 py-1 rounded-lg text-sm font-bold">活動三</span>
+                    <h3 class="text-xl font-bold text-slate-800">尋找隱藏的插圖（潛在課程與微偏見解構）</h3>
+                    <span class="bg-slate-100 text-slate-600 text-xs px-2.5 py-1 rounded-md">時間：約 15 分鐘</span>
+                </div>
+
+                <div class="bg-indigo-50/60 p-4 rounded-xl border border-indigo-100 text-sm">
+                    <h4 class="font-bold text-indigo-950 mb-1"><i class="fa-solid fa-bullseye text-indigo-600 mr-1"></i> 教學目標</h4>
+                    <p class="text-slate-700">引導學生從日常現成的教科書、繪本或電視廣告插圖中，抓出隱含的性別、職業與階級刻板印象（即 Apple 所說的「潛在課程 Hidden Curriculum」）。</p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-800 text-sm mb-2"><i class="fa-solid fa-magnifying-glass text-indigo-600 representative mr-1"></i> 實地觀察任務步驟</h4>
+                    <ol class="list-decimal list-inside text-sm text-slate-700 space-y-1.5 pl-2">
+                        <li>請學生翻開現有社會科或國語科課本第 20~40 頁（或教師發放廣告印刷品）。</li>
+                        <li>拿螢光筆圈出所有出現的人物插圖，並進行分類紀錄。</li>
+                        <li>對照統計：畫裡穿西裝、做決策、當專業人士的是誰？做家務、照顧他人、或是沒有名字的背景人是誰？</li>
+                    </ol>
+                </div>
+
+                <div class="bg-amber-50 p-4 rounded-xl border border-amber-200">
+                    <h4 class="font-bold text-amber-900 text-sm mb-1"><i class="fa-solid fa-comments text-amber-600 mr-1"></i> 教師提問引導話術（知識非中立總結）</h4>
+                    <div class="text-xs sm:text-sm text-amber-950 italic space-y-1">
+                        <p>🗣️ 「課本有直接寫文字說『女生只能做家事』嗎？沒有！但為什麼圖片老是這樣畫？」</p>
+                        <p>🗣️ 「這就是 Apple 教授說的**『潛在課程』**！就像背景音樂一樣，你沒有特別去聽它，但天天聽，你就會以為世界本來就應該長這樣。我們要學會把這個背景音樂關掉，用自己的頭腦重新看事情！」</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- ==================== TAB 3: 評分規準 (RUBRIC) ==================== -->
+        <div id="tab-rubric" class="hidden space-y-6">
+
+            <!-- Title Header -->
+            <div class="bg-indigo-900 text-white rounded-2xl p-6 shadow-md border-l-4 border-amber-400">
+                <span class="bg-amber-400 text-indigo-950 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">TEACHER EVALUATION & RUBRIC</span>
+                <h2 class="text-2xl font-black mt-2">📊 批判思考學習評估規準 (Rubric)</h2>
+                <p class="text-sm text-indigo-200 mt-1">專為評估學生在「知識非中立性」體驗活動後的覺察視角、選擇性解析與批判遷移能力設計。</p>
+            </div>
+
+            <!-- Score Summary Card -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-wrap justify-between items-center no-print">
+                <div class="flex items-center space-x-4">
+                    <div class="bg-indigo-100 text-indigo-900 p-3 rounded-xl font-black text-2xl" id="calc-total-score">
+                        16 / 16
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-800">總體批判思考表現估算</h4>
+                        <div id="calc-level-tag" class="text-xs bg-emerald-500 text-white px-2 py-0.5 rounded mt-1 font-bold inline-block">
+                            Level 4: 傑出 (Level 4)
+                        </div>
+                    </div>
+                </div>
+                <div class="text-xs text-slate-500 mt-2 sm:mt-0">
+                    <i class="fa-solid fa-circle-info mr-1"></i> 於下方表格下拉選單選擇分項得分，系統將自動計算評語
+                </div>
+            </div>
+
+            <!-- Rubric Table -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                        <thead>
+                            <tr class="bg-indigo-950 text-white">
+                                <th class="p-4 w-1/5 font-bold">評量維度</th>
+                                <th class="p-4 w-1/5 font-bold bg-emerald-900/40">Level 4 傑出 (4分)</th>
+                                <th class="p-4 w-1/5 font-bold bg-blue-900/40">Level 3 精熟 (3分)</th>
+                                <th class="p-4 w-1/5 font-bold bg-amber-900/40">Level 2 發展中 (2分)</th>
+                                <th class="p-4 w-1/5 font-bold bg-rose-900/40">Level 1 啟蒙 (1分)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200">
+                            <!-- Criterion 1 -->
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="p-4 font-bold text-slate-800 bg-slate-50/80">
+                                    一、視角覺察與換位思考<br>
+                                    <span class="text-xs font-normal text-slate-500">第一站：小熊果汁風波</span>
+                                    <div class="mt-2 text-indigo-600 font-semibold no-print">
+                                        試算給分：
+                                        <select onchange="updateRubricScore(0, this.value)" class="border rounded p-1 text-xs bg-white">
+                                            <option value="4" selected>4分</option>
+                                            <option value="3">3分</option>
+                                            <option value="2">2分</option>
+                                            <option value="1">1分</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td class="p-4 text-slate-700 bg-emerald-50/20">能深刻理解不同利益角色的立場，並精準指出「每個人都只紀錄對自己有利的細節」。</td>
+                                <td class="p-4 text-slate-700 bg-blue-50/20">能指出不同角色的報導差異，並說明立場為何影響看事情的角度。</td>
+                                <td class="p-4 text-slate-700 bg-amber-50/20">僅能描述表面事實的異同，需引導才能理解「立場」帶來的視角限制。</td>
+                                <td class="p-4 text-slate-700 bg-rose-50/20">堅持單一角色的看法為絕對正確，無法認同其他角度的說法。</td>
+                            </tr>
+                            <!-- Criterion 2 -->
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="p-4 font-bold text-slate-800 bg-slate-50/80">
+                                    二、選擇性與訊息刪除解析<br>
+                                    <span class="text-xs font-normal text-slate-500">第二站：歷史課本總編輯</span>
+                                    <div class="mt-2 text-indigo-600 font-semibold no-print">
+                                        試算給分：
+                                        <select onchange="updateRubricScore(1, this.value)" class="border rounded p-1 text-xs bg-white">
+                                            <option value="4" selected>4分</option>
+                                            <option value="3">3分</option>
+                                            <option value="2">2分</option>
+                                            <option value="1">1分</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td class="p-4 text-slate-700 bg-emerald-50/20">能明確意識到「編輯選擇」就是權力展現，並能深論「未被呈現的訊息對後人歷史認知的影響」。</td>
+                                <td class="p-4 text-slate-700 bg-blue-50/20">能說明選擇素材的原因，並指出被捨棄的資訊會造成讀者認知上的盲點。</td>
+                                <td class="p-4 text-slate-700 bg-amber-50/20">能完成素材選擇與分類，但對於「丟棄資訊會帶來何種後果」無法完整說明。</td>
+                                <td class="p-4 text-slate-700 bg-rose-50/20">認為編輯選擇只是隨機的，無法體會「隱藏與選擇」背後的意義。</td>
+                            </tr>
+                            <!-- Criterion 3 -->
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="p-4 font-bold text-slate-800 bg-slate-50/80">
+                                    三、意識形態與潛在課程解構<br>
+                                    <span class="text-xs font-normal text-slate-500">第三站：隱藏的插圖</span>
+                                    <div class="mt-2 text-indigo-600 font-semibold no-print">
+                                        試算給分：
+                                        <select onchange="updateRubricScore(2, this.value)" class="border rounded p-1 text-xs bg-white">
+                                            <option value="4" selected>4分</option>
+                                            <option value="3">3分</option>
+                                            <option value="2">2分</option>
+                                            <option value="1">1分</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td class="p-4 text-slate-700 bg-emerald-50/20">能敏銳找出課本插圖或文本中隱含的性別、階級或族群偏見，並解釋潛在課程的馴化效果。</td>
+                                <td class="p-4 text-slate-700 bg-blue-50/20">能找出圖片中的刻板印象，並說明這些圖片可能給讀者帶來的定型觀念。</td>
+                                <td class="p-4 text-slate-700 bg-amber-50/20">能列出插圖中的人物特徵，但難以連結至社會偏見或潛在意識形態。</td>
+                                <td class="p-4 text-slate-700 bg-rose-50/20">無法觀察出插圖中的任何偏見，認為課本呈現的一切皆完全中立客觀。</td>
+                            </tr>
+                            <!-- Criterion 4 -->
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="p-4 font-bold text-slate-800 bg-slate-50/80">
+                                    四、批判思考與生活遷移<br>
+                                    <span class="text-xs font-normal text-slate-500">終極任務：三大金鑰</span>
+                                    <div class="mt-2 text-indigo-600 font-semibold no-print">
+                                        試算給分：
+                                        <select onchange="updateRubricScore(3, this.value)" class="border rounded p-1 text-xs bg-white">
+                                            <option value="4" selected>4分</option>
+                                            <option value="3">3分</option>
+                                            <option value="2">2分</option>
+                                            <option value="1">1分</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td class="p-4 text-slate-700 bg-emerald-50/20">能自主運用金鑰剖析現實生活素材（廣告/新聞），邏輯清晰且展現強烈的公民主體意識。</td>
+                                <td class="p-4 text-slate-700 bg-blue-50/20">能正確使用金鑰提問分析一個生活例子，並說明「這個訊息對誰有利」。</td>
+                                <td class="p-4 text-slate-700 bg-amber-50/20">僅能抄寫課堂範例，或是分析生活例子時理由較為牽強、缺乏批判深度。</td>
+                                <td class="p-4 text-slate-700 bg-rose-50/20">未完成終極任務，或無法運用金鑰提出任何質疑。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Qualitative Feedback Box -->
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm no-print">
+                <h4 class="font-bold text-slate-800 text-sm mb-2"><i class="fa-solid fa-comment-dots text-indigo-600 mr-1"></i> 教師質性評語範本自動生成器</h4>
+                <div id="rubric-feedback-output" class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm text-slate-700 font-mono">
+                    【評語推薦】：該生展現極佳的批判思考敏銳度！不僅能準確識別不同角色的立場視角，更能自主運用「金鑰提問」剖析現實生活中的廣告與媒體訊息，表現優異！
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-slate-400 text-center text-xs py-4 mt-8 border-t border-slate-700 no-print">
+        <p>邁克爾·阿普爾（Michael W. Apple）批判教育學課程轉化教材 ｜ 知識非中立性與批判多元文化教學實踐</p>
+    </footer>
+
+    <!-- JavaScript Interactivity -->
+    <script>
+        // Tab Switch Logic
+        function switchTab(tabName) {
+            const worksheetContent = document.getElementById('tab-worksheet');
+            const scriptContent = document.getElementById('tab-script');
+            const rubricContent = document.getElementById('tab-rubric');
+
+            const btnWorksheet = document.getElementById('tab-worksheet-btn');
+            const btnScript = document.getElementById('tab-script-btn');
+            const btnRubric = document.getElementById('tab-rubric-btn');
+
+            // Hide all
+            worksheetContent.classList.add('hidden');
+            scriptContent.classList.add('hidden');
+            rubricContent.classList.add('hidden');
+
+            // Reset buttons
+            const activeClass = "px-3 sm:px-4 py-2 rounded-lg font-bold text-xs sm:text-sm transition-all bg-amber-400 text-indigo-950 shadow";
+            const inactiveClass = "px-3 sm:px-4 py-2 rounded-lg font-bold text-xs sm:text-sm transition-all bg-indigo-800 hover:bg-indigo-700 text-white";
+
+            btnWorksheet.className = inactiveClass;
+            btnScript.className = inactiveClass;
+            btnRubric.className = inactiveClass;
+
+            if (tabName === 'worksheet') {
+                worksheetContent.classList.remove('hidden');
+                btnWorksheet.className = activeClass;
+            } else if (tabName === 'script') {
+                scriptContent.classList.remove('hidden');
+                btnScript.className = activeClass;
+            } else if (tabName === 'rubric') {
+                rubricContent.classList.remove('hidden');
+                btnRubric.className = activeClass;
+            }
+        }
+
+        // Rubric Dynamic Calculator
+        let rubricScores = [4, 4, 4, 4];
+
+        function updateRubricScore(index, value) {
+            rubricScores[index] = parseInt(value);
+            const total = rubricScores.reduce((a, b) => a + b, 0);
+            
+            const totalScoreEl = document.getElementById('calc-total-score');
+            const levelTagEl = document.getElementById('calc-level-tag');
+            const feedbackEl = document.getElementById('rubric-feedback-output');
+
+            totalScoreEl.innerText = `${total} / 16`;
+
+            let levelText = "";
+            let badgeClass = "";
+            let feedback = "";
+
+            if (total >= 14) {
+                levelText = "Level 4: 傑出 (Level 4)";
+                badgeClass = "text-xs bg-emerald-500 text-white px-2 py-0.5 rounded mt-1 font-bold";
+                feedback = "【評語推薦】：該生展現極佳的批判思考敏銳度！不僅能準確識別不同角色的立場視角，更能自主運用「金鑰提問」剖析現實生活中的廣告與媒體訊息，表現傑出！";
+            } else if (total >= 11) {
+                levelText = "Level 3: 精熟 (Level 3)";
+                badgeClass = "text-xs bg-blue-500 text-white px-2 py-0.5 rounded mt-1 font-bold";
+                feedback = "【評語推薦】：表現良好！能理解不同立場帶來的視角差異，並能完成課本插圖與生活範例的批判檢視。建議可再加強思考「排除訊息對社會造成的長遠影響」。";
+            } else if (total >= 8) {
+                levelText = "Level 2: 發展中 (Level 2)";
+                badgeClass = "text-xs bg-amber-500 text-white px-2 py-0.5 rounded mt-1 font-bold";
+                feedback = "【評語推薦】：已具備基本觀察力，能列舉不同敘事。建議在未來的課堂討論中，多引導其思考「為什麼這張圖片/這段文字會這樣呈現？背後是誰在決定？」。";
+            } else {
+                levelText = "Level 1: 啟蒙 (Level 1)";
+                badgeClass = "text-xs bg-rose-500 text-white px-2 py-0.5 rounded mt-1 font-bold";
+                feedback = "【評語推薦】：建議透過同儕合作與口頭討論，輔導其理解「角度與選擇」的概念，協助建立第一階段的批判質疑意識。";
+            }
+
+            levelTagEl.innerText = levelText;
+            levelTagEl.className = badgeClass;
+            feedbackEl.innerText = feedback;
+        }
+
+        // Auto set current date in input
+        document.getElementById('student-date').valueAsDate = new Date();
+    </script>
+</body>
+</html>
